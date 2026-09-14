@@ -1,0 +1,429 @@
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { AlgorithmCategory, AlgorithmStep } from './types/algorithm';
+
+// Types
+import { DSUOperation, DSUSnapshot } from './types/dsu';
+import { BinarySearchSnapshot } from './types/binarySearch';
+import { DijkstraSnapshot } from './types/dijkstra';
+import { KruskalSnapshot } from './types/kruskal';
+import { QuickSortSnapshot } from './types/quickSort';
+import { BFSSnapshot } from './types/bfs';
+import { DFSSnapshot } from './types/dfs';
+import { MergeSortSnapshot } from './types/mergeSort';
+import { BSTSnapshot } from './types/bst';
+
+// Engines & Snippets
+import { recordDSUSimulation } from './algorithms/dsu/dsuEngine';
+import { DSU_CODE_LINES } from './algorithms/dsu/dsuSnippets';
+import { recordBinarySearchSimulation } from './algorithms/binarySearch/bsEngine';
+import { BS_CODE_LINES } from './algorithms/binarySearch/bsSnippets';
+import { recordDijkstraSimulation } from './algorithms/dijkstra/dijkstraEngine';
+import { DIJKSTRA_CODE_LINES } from './algorithms/dijkstra/dijkstraSnippets';
+import { recordKruskalSimulation } from './algorithms/kruskal/kruskalEngine';
+import { KRUSKAL_CODE_LINES } from './algorithms/kruskal/kruskalSnippets';
+import { recordQuickSortSimulation } from './algorithms/quickSort/quickSortEngine';
+import { QUICK_SORT_CODE_LINES } from './algorithms/quickSort/quickSortSnippets';
+import { recordBFSSimulation } from './algorithms/bfs/bfsEngine';
+import { BFS_CODE_LINES } from './algorithms/bfs/bfsSnippets';
+import { recordDFSSimulation } from './algorithms/dfs/dfsEngine';
+import { DFS_CODE_LINES } from './algorithms/dfs/dfsSnippets';
+import { recordMergeSortSimulation } from './algorithms/mergesort/mergeSortEngine';
+import { MERGE_SORT_CODE_LINES } from './algorithms/mergesort/mergeSortSnippets';
+import { recordBSTSimulation } from './algorithms/bst/bstEngine';
+import { BST_CODE_LINES } from './algorithms/bst/bstSnippets';
+
+// Components
+import { usePlayback } from './engine/usePlayback';
+import { Navbar } from './components/Navbar';
+import { PlaybackControls } from './components/PlaybackControls';
+import { CodeViewer } from './components/CodeViewer';
+import { AlgorithmCatalogModal } from './components/AlgorithmCatalogModal';
+
+// Visualizers
+import { DSUVisualizer } from './components/visualizers/DSUVisualizer';
+import { BinarySearchVisualizer } from './components/visualizers/BinarySearchVisualizer';
+import { DijkstraVisualizer } from './components/visualizers/DijkstraVisualizer';
+import { KruskalVisualizer } from './components/visualizers/KruskalVisualizer';
+import { QuickSortVisualizer } from './components/visualizers/QuickSortVisualizer';
+import { BFSVisualizer } from './components/visualizers/BFSVisualizer';
+import { DFSVisualizer } from './components/visualizers/DFSVisualizer';
+import { MergeSortVisualizer } from './components/visualizers/MergeSortVisualizer';
+import { BSTVisualizer } from './components/visualizers/BSTVisualizer';
+
+import { Sparkles, Info, CheckCircle2, AlertTriangle, Layers, Zap } from 'lucide-react';
+
+export const App: React.FC = () => {
+  // Active Algorithm
+  const [currentAlgorithm, setCurrentAlgorithm] = useState<AlgorithmCategory>('DSU');
+  const [isCatalogOpen, setIsCatalogOpen] = useState<boolean>(false);
+
+  // 1. DSU State
+  const [dsuNodeCount, setDsuNodeCount] = useState<number>(7);
+  const [dsuOperations, setDsuOperations] = useState<DSUOperation[]>([
+    { type: 'UNION', u: 0, v: 1 },
+    { type: 'UNION', u: 1, v: 2 },
+    { type: 'UNION', u: 3, v: 4 },
+    { type: 'UNION', u: 4, v: 5 },
+    { type: 'UNION', u: 2, v: 5 },
+    { type: 'FIND', u: 5 },
+    { type: 'UNION', u: 0, v: 4 },
+  ]);
+
+  // 2. Binary Search State
+  const [bsArray, setBsArray] = useState<number[]>([
+    4, 9, 15, 23, 31, 42, 56, 67, 78, 89, 95, 108
+  ]);
+  const [bsTarget, setBsTarget] = useState<number>(42);
+
+  // 3. Dijkstra State
+  const [dijkstraSource, setDijkstraSource] = useState<number>(0);
+
+  // 4. QuickSort State
+  const [qsArray, setQsArray] = useState<number[]>([
+    48, 15, 82, 33, 64, 21, 95, 7, 56, 39, 72, 28
+  ]);
+
+  // 5. MergeSort State
+  const [msArray, setMsArray] = useState<number[]>([
+    38, 27, 43, 3, 9, 82, 10, 19, 54, 12, 65, 31
+  ]);
+
+  // 6. BST State
+  const [bstValues, setBstValues] = useState<number[]>([
+    45, 25, 65, 15, 35, 55, 75, 30
+  ]);
+
+  // 7. BFS / DFS State
+  const [bfsStartNode, setBfsStartNode] = useState<number>(0);
+  const [dfsStartNode, setDfsStartNode] = useState<number>(0);
+
+  // Generate steps per algorithm
+  const dsuSteps = useMemo(() => recordDSUSimulation(dsuNodeCount, dsuOperations), [dsuNodeCount, dsuOperations]);
+  const bsSteps = useMemo(() => recordBinarySearchSimulation(bsArray, bsTarget), [bsArray, bsTarget]);
+  const dijkstraSteps = useMemo(() => recordDijkstraSimulation(dijkstraSource), [dijkstraSource]);
+  const kruskalSteps = useMemo(() => recordKruskalSimulation(), []);
+  const qsSteps = useMemo(() => recordQuickSortSimulation(qsArray), [qsArray]);
+  const bfsSteps = useMemo(() => recordBFSSimulation(bfsStartNode), [bfsStartNode]);
+  const dfsSteps = useMemo(() => recordDFSSimulation(dfsStartNode), [dfsStartNode]);
+  const msSteps = useMemo(() => recordMergeSortSimulation(msArray), [msArray]);
+  const bstSteps = useMemo(() => recordBSTSimulation(bstValues), [bstValues]);
+
+  // Active steps passed to playback engine
+  const activeSteps = useMemo<AlgorithmStep<any>[]>(() => {
+    switch (currentAlgorithm) {
+      case 'DSU':
+        return dsuSteps;
+      case 'BINARY_SEARCH':
+        return bsSteps;
+      case 'DIJKSTRA':
+        return dijkstraSteps;
+      case 'KRUSKAL':
+        return kruskalSteps;
+      case 'QUICK_SORT':
+        return qsSteps;
+      case 'BFS':
+        return bfsSteps;
+      case 'DFS':
+        return dfsSteps;
+      case 'MERGE_SORT':
+        return msSteps;
+      case 'BST':
+        return bstSteps;
+      default:
+        return dsuSteps;
+    }
+  }, [currentAlgorithm, dsuSteps, bsSteps, dijkstraSteps, kruskalSteps, qsSteps, bfsSteps, dfsSteps, msSteps, bstSteps]);
+
+  const playback = usePlayback(activeSteps);
+
+  // Keyboard shortcut listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName)) {
+        return;
+      }
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        playback.togglePlay();
+      } else if (e.code === 'ArrowRight') {
+        e.preventDefault();
+        playback.nextStep();
+      } else if (e.code === 'ArrowLeft') {
+        e.preventDefault();
+        playback.prevStep();
+      } else if (e.key === 'r' || e.key === 'R') {
+        playback.reset();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [playback]);
+
+  // Code details mapping
+  const codeDetails = useMemo(() => {
+    switch (currentAlgorithm) {
+      case 'DSU':
+        return { title: 'DSU_DisjointSet.cpp', lines: DSU_CODE_LINES };
+      case 'BINARY_SEARCH':
+        return { title: 'BinarySearch.cpp', lines: BS_CODE_LINES };
+      case 'DIJKSTRA':
+        return { title: 'Dijkstra_ShortestPath.cpp', lines: DIJKSTRA_CODE_LINES };
+      case 'KRUSKAL':
+        return { title: 'Kruskal_MST.cpp', lines: KRUSKAL_CODE_LINES };
+      case 'QUICK_SORT':
+        return { title: 'QuickSort_Lomuto.cpp', lines: QUICK_SORT_CODE_LINES };
+      case 'BFS':
+        return { title: 'BFS_Queue.cpp', lines: BFS_CODE_LINES };
+      case 'DFS':
+        return { title: 'DFS_RecursionStack.cpp', lines: DFS_CODE_LINES };
+      case 'MERGE_SORT':
+        return { title: 'MergeSort_DivideAndConquer.cpp', lines: MERGE_SORT_CODE_LINES };
+      case 'BST':
+        return { title: 'BST_BinarySearchTree.cpp', lines: BST_CODE_LINES };
+      default:
+        return { title: 'Code.cpp', lines: [] };
+    }
+  }, [currentAlgorithm]);
+
+  // Handlers
+  const handleSelectAlgorithm = useCallback((algo: AlgorithmCategory) => {
+    setCurrentAlgorithm(algo);
+    playback.reset();
+  }, [playback]);
+
+  const handleGenerateRandomBSArray = useCallback(() => {
+    const size = 12;
+    const nums = new Set<number>();
+    while (nums.size < size) {
+      nums.add(Math.floor(Math.random() * 95) + 5);
+    }
+    const sorted = Array.from(nums).sort((a, b) => a - b);
+    const randomTarget = Math.random() > 0.3 
+      ? sorted[Math.floor(Math.random() * sorted.length)] 
+      : Math.floor(Math.random() * 95) + 5;
+    setBsArray(sorted);
+    setBsTarget(randomTarget);
+  }, []);
+
+  const handleGenerateRandomQSArray = useCallback(() => {
+    const size = 12;
+    const newArr: number[] = [];
+    for (let i = 0; i < size; i++) {
+      newArr.push(Math.floor(Math.random() * 92) + 8);
+    }
+    setQsArray(newArr);
+  }, []);
+
+  const handleGenerateRandomMSArray = useCallback(() => {
+    const size = 12;
+    const newArr: number[] = [];
+    for (let i = 0; i < size; i++) {
+      newArr.push(Math.floor(Math.random() * 92) + 8);
+    }
+    setMsArray(newArr);
+  }, []);
+
+  // Active step details
+  const activeStep = playback.currentStep;
+  const activeCodeLine = activeStep ? activeStep.codeLine : 1;
+  const activeVariables = activeStep ? activeStep.variables : {};
+
+  // Action badge resolver
+  const getBadge = () => {
+    if (!activeStep) return { icon: <Info className="w-3 h-3" />, label: 'READY', cls: 'bg-slate-800 text-slate-300' };
+    switch (activeStep.actionType) {
+      case 'PATH_COMPRESS':
+        return { icon: <Zap className="w-3 h-3 text-amber-400" />, label: 'PATH COMPRESSION', cls: 'bg-amber-500/15 text-amber-300 border-amber-500/30' };
+      case 'UNION_BY_RANK':
+        return { icon: <Sparkles className="w-3 h-3 text-cyan-400" />, label: 'UNION BY RANK', cls: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30' };
+      case 'CYCLE_DETECTED':
+        return { icon: <AlertTriangle className="w-3 h-3 text-rose-400" />, label: 'CHU TRÌNH (CYCLE)', cls: 'bg-rose-500/15 text-rose-300 border-rose-500/30' };
+      case 'FOUND':
+        return { icon: <CheckCircle2 className="w-3 h-3 text-emerald-400" />, label: 'TÌM THẤY TARGET', cls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' };
+      case 'RELAX_EDGE':
+        return { icon: <Zap className="w-3 h-3 text-cyan-400" />, label: 'RELAX EDGE', cls: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30' };
+      case 'ADD_TO_MST':
+        return { icon: <Sparkles className="w-3 h-3 text-emerald-400" />, label: 'CHẤP NHẬN VÀO MST', cls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' };
+      case 'SWAP':
+        return { icon: <Sparkles className="w-3 h-3 text-purple-400" />, label: 'HOÁN ĐỔI (SWAP)', cls: 'bg-purple-500/15 text-purple-300 border-purple-500/30' };
+      default:
+        return { icon: <Info className="w-3 h-3 text-cyan-400" />, label: activeStep.actionType, cls: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30' };
+    }
+  };
+
+  const badge = getBadge();
+
+  return (
+    <div className="h-screen w-screen flex flex-col bg-dark-900 text-slate-100 overflow-hidden select-none">
+      {/* 1. Navbar (Fixed height 56px) */}
+      <Navbar
+        currentAlgorithm={currentAlgorithm}
+        onSelectAlgorithm={handleSelectAlgorithm}
+        onOpenCatalog={() => setIsCatalogOpen(true)}
+        onReset={playback.reset}
+      />
+
+      {/* 2. Top Step Narration & Live Variables Bar (Fixed height ~52px) */}
+      <div className="bg-dark-850/90 border-b border-slate-800/80 px-4 md:px-6 py-2 flex items-center justify-between gap-4 shrink-0 z-20">
+        {/* Left: Action Badge + Title + Narration */}
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold border shrink-0 ${badge.cls}`}>
+            {badge.icon}
+            <span>{badge.label}</span>
+          </span>
+
+          <div className="min-w-0 flex-1">
+            <h2 className="font-bold text-xs md:text-sm text-slate-100 truncate">
+              {activeStep ? activeStep.title : 'Chuẩn bị mô phỏng'}
+            </h2>
+            <p className="text-[11px] text-slate-400 truncate hidden sm:block">
+              {activeStep ? activeStep.description : 'Bấm Play hoặc Bước tiếp theo để bắt đầu.'}
+            </p>
+          </div>
+        </div>
+
+        {/* Right: Live Variable Chips */}
+        <div className="flex items-center gap-1.5 overflow-x-auto shrink-0 max-w-[45%]">
+          {Object.entries(activeVariables).slice(0, 5).map(([k, v]) => (
+            <div
+              key={k}
+              className="px-2 py-0.5 rounded-lg bg-dark-900 border border-slate-800 flex items-center gap-1.5 text-[11px] font-mono shrink-0"
+            >
+              <span className="text-slate-500">{k}:</span>
+              <span className="text-cyan-300 font-bold">{String(v)}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 3. Central Studio Area (Flex-1, side-by-side, no overflow) */}
+      <div className="flex-1 min-h-0 p-3 md:p-4 grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch overflow-hidden">
+        {/* Left Column: Visualizer Canvas (7 cols) */}
+        <div className="lg:col-span-7 h-full min-h-0 flex flex-col overflow-hidden">
+          {currentAlgorithm === 'DSU' && (
+            <DSUVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as DSUSnapshot) ||
+                dsuSteps[0]?.dataSnapshot
+              }
+              onRunCustomOperations={(ops) => setDsuOperations((prev) => [...prev, ...ops])}
+            />
+          )}
+
+          {currentAlgorithm === 'BINARY_SEARCH' && (
+            <BinarySearchVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as BinarySearchSnapshot) ||
+                bsSteps[0]?.dataSnapshot
+              }
+              onSetNewTarget={(newTarget) => setBsTarget(newTarget)}
+              onGenerateRandomArray={handleGenerateRandomBSArray}
+            />
+          )}
+
+          {currentAlgorithm === 'DIJKSTRA' && (
+            <DijkstraVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as DijkstraSnapshot) ||
+                dijkstraSteps[0]?.dataSnapshot
+              }
+              onSelectSource={(src) => setDijkstraSource(src)}
+            />
+          )}
+
+          {currentAlgorithm === 'KRUSKAL' && (
+            <KruskalVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as KruskalSnapshot) ||
+                kruskalSteps[0]?.dataSnapshot
+              }
+            />
+          )}
+
+          {currentAlgorithm === 'QUICK_SORT' && (
+            <QuickSortVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as QuickSortSnapshot) ||
+                qsSteps[0]?.dataSnapshot
+              }
+              onGenerateRandomArray={handleGenerateRandomQSArray}
+            />
+          )}
+
+          {currentAlgorithm === 'BFS' && (
+            <BFSVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as BFSSnapshot) ||
+                bfsSteps[0]?.dataSnapshot
+              }
+              onSelectStartNode={(node) => setBfsStartNode(node)}
+            />
+          )}
+
+          {currentAlgorithm === 'DFS' && (
+            <DFSVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as DFSSnapshot) ||
+                dfsSteps[0]?.dataSnapshot
+              }
+            />
+          )}
+
+          {currentAlgorithm === 'MERGE_SORT' && (
+            <MergeSortVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as MergeSortSnapshot) ||
+                msSteps[0]?.dataSnapshot
+              }
+              onGenerateRandomArray={handleGenerateRandomMSArray}
+            />
+          )}
+
+          {currentAlgorithm === 'BST' && (
+            <BSTVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as BSTSnapshot) ||
+                bstSteps[0]?.dataSnapshot
+              }
+            />
+          )}
+        </div>
+
+        {/* Right Column: Code Viewer (5 cols) - Exactly side-by-side with equal height */}
+        <div className="lg:col-span-5 h-full min-h-0 flex flex-col overflow-hidden">
+          <CodeViewer
+            title={codeDetails.title}
+            lines={codeDetails.lines}
+            activeLine={activeCodeLine}
+          />
+        </div>
+      </div>
+
+      {/* 4. Docked Bottom Playback Bar (Fixed at very bottom, never overlapping!) */}
+      <PlaybackControls
+        currentStepIndex={playback.currentStepIndex}
+        totalSteps={playback.totalSteps}
+        isPlaying={playback.isPlaying}
+        speed={playback.speed}
+        onTogglePlay={playback.togglePlay}
+        onNext={playback.nextStep}
+        onPrev={playback.prevStep}
+        onReset={playback.reset}
+        onGoToStep={playback.goToStep}
+        onSetSpeed={playback.setSpeed}
+      />
+
+      {/* Algorithm Catalog Modal */}
+      <AlgorithmCatalogModal
+        isOpen={isCatalogOpen}
+        onClose={() => setIsCatalogOpen(false)}
+        currentAlgorithm={currentAlgorithm}
+        onSelectAlgorithm={handleSelectAlgorithm}
+      />
+    </div>
+  );
+};
+
+export default App;
