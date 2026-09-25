@@ -418,9 +418,9 @@ export const App: React.FC = () => {
       </div>
 
       {/* 3. Central Studio Area (Flex-1, side-by-side, no overflow) */}
-      <div className="flex-1 min-h-0 p-2 md:p-4 grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch overflow-hidden">
+      <div className="flex-1 min-h-0 p-2 md:p-4 grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch overflow-y-auto lg:overflow-hidden">
         {/* Left Column: Visualizer Canvas (7 cols) — hidden when Code pane on mobile */}
-        <div className={`lg:col-span-7 h-full min-h-0 flex flex-col overflow-hidden ${mobilePane === 'code' ? 'hidden lg:flex' : 'flex'}`}>
+        <div className={`lg:col-span-7 h-full min-h-0 flex flex-col lg:overflow-hidden ${mobilePane === 'code' ? 'hidden lg:flex' : 'flex'}`}>
 
           {currentAlgorithm === 'DSU' && (
             <DSUVisualizer
