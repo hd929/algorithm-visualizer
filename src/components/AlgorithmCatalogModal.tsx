@@ -12,14 +12,17 @@ import {
   Sparkles,
   GitBranch,
   Split,
-  Workflow
+  Workflow,
+  Backpack,
+  Crown,
+  GitFork
 } from 'lucide-react';
 import { AlgorithmCategory } from '../types/algorithm';
 
 interface AlgorithmItem {
   id: AlgorithmCategory;
   name: string;
-  category: 'Đồ Thị & Cụm' | 'Tìm Kiếm' | 'Sắp Xếp' | 'Cây & Cấu Trúc';
+  category: 'Đồ Thị & Cụm' | 'Tìm Kiếm' | 'Sắp Xếp' | 'Cây & Cấu Trúc' | 'Quy Hoạch Động' | 'Đệ Quy & Quay Lui';
   icon: React.ReactNode;
   timeComplexity: string;
   spaceComplexity: string;
@@ -96,6 +99,16 @@ export const ALGORITHMS_CATALOG: AlgorithmItem[] = [
     tags: ['Sorting', 'Divide & Conquer', 'Buffer', 'Stable'],
   },
   {
+    id: 'HEAP_SORT',
+    name: 'Heap Sort (Sắp Xếp Vun Đống)',
+    category: 'Sắp Xếp',
+    icon: <GitFork className="w-5 h-5 text-yellow-400" />,
+    timeComplexity: 'O(N log N)',
+    spaceComplexity: 'O(1)',
+    description: 'Xây dựng cây nhị phân Max-Heap, liên tục trích xuất phần tử cực đại về cuối mảng và vun đống lại.',
+    tags: ['Sorting', 'Heap', 'Binary Tree', 'In-place'],
+  },
+  {
     id: 'BFS',
     name: 'Breadth-First Search (BFS)',
     category: 'Đồ Thị & Cụm',
@@ -116,6 +129,16 @@ export const ALGORITHMS_CATALOG: AlgorithmItem[] = [
     tags: ['Graph', 'Call Stack', 'LIFO', 'Backtracking'],
   },
   {
+    id: 'TOPO_SORT',
+    name: "Topological Sort (Thuật Toán Kahn)",
+    category: 'Đồ Thị & Cụm',
+    icon: <Workflow className="w-5 h-5 text-sky-400" />,
+    timeComplexity: 'O(V + E)',
+    spaceComplexity: 'O(V)',
+    description: 'Sắp xếp thứ tự các đỉnh đồ thị có hướng không chu trình (DAG) theo bán bậc vào (In-degree) và Hàng đợi.',
+    tags: ['Graph', 'DAG', 'In-degree', 'Queue', 'Kahn'],
+  },
+  {
     id: 'BST',
     name: 'Binary Search Tree (Cây BST)',
     category: 'Cây & Cấu Trúc',
@@ -124,6 +147,36 @@ export const ALGORITHMS_CATALOG: AlgorithmItem[] = [
     spaceComplexity: 'O(N)',
     description: 'Cấu trúc cây nhị phân tìm kiếm: node con trái < cha < node con phải. Duyệt In-order cho dãy tăng dần.',
     tags: ['Tree', 'Binary Tree', 'Inorder', 'Search'],
+  },
+  {
+    id: 'TRIE',
+    name: 'Trie (Cây Tiền Tố - Prefix Tree)',
+    category: 'Cây & Cấu Trúc',
+    icon: <GitBranch className="w-5 h-5 text-emerald-400" />,
+    timeComplexity: 'O(L)',
+    spaceComplexity: 'O(ALPHABET * L * N)',
+    description: 'Cây tiền tố tối ưu lưu trữ chuỗi ký tự, tra cứu từ điển và tự động gợi ý (Autocomplete) cực nhanh.',
+    tags: ['Tree', 'Trie', 'Prefix', 'Strings'],
+  },
+  {
+    id: 'KNAPSACK',
+    name: '0/1 Knapsack Problem (Bài Toán Balo)',
+    category: 'Quy Hoạch Động',
+    icon: <Backpack className="w-5 h-5 text-cyan-400" />,
+    timeComplexity: 'O(N * W)',
+    spaceComplexity: 'O(N * W)',
+    description: 'Quy hoạch động kinh điển: tối ưu hóa giá trị đồ vật mang theo trong giới hạn sức chứa balo W, truy vết lời giải.',
+    tags: ['DP', 'Dynamic Programming', 'Table', 'Backtrack'],
+  },
+  {
+    id: 'N_QUEENS',
+    name: 'N-Queens Problem (N Quân Hậu)',
+    category: 'Đệ Quy & Quay Lui',
+    icon: <Crown className="w-5 h-5 text-amber-400" />,
+    timeComplexity: 'O(N!)',
+    spaceComplexity: 'O(N)',
+    description: 'Thuật toán quay lui (Backtracking) kinh điển: đặt N quân hậu trên bàn cờ NxN không chiếu tướng lẫn nhau.',
+    tags: ['Backtracking', 'Recursion', 'Chess', 'Permutation'],
   },
 ];
 
@@ -138,7 +191,8 @@ export const AlgorithmCatalogModal: React.FC<AlgorithmCatalogModalProps> = ({
 
   if (!isOpen) return null;
 
-  const categories = ['ALL', 'Đồ Thị & Cụm', 'Tìm Kiếm', 'Sắp Xếp', 'Cây & Cấu Trúc'];
+  const categories = ['ALL', 'Đồ Thị & Cụm', 'Tìm Kiếm', 'Sắp Xếp', 'Cây & Cấu Trúc', 'Quy Hoạch Động', 'Đệ Quy & Quay Lui'];
+
 
   const filteredAlgorithms = ALGORITHMS_CATALOG.filter((item) => {
     const matchesSearch =

@@ -11,6 +11,11 @@ import { BFSSnapshot } from './types/bfs';
 import { DFSSnapshot } from './types/dfs';
 import { MergeSortSnapshot } from './types/mergeSort';
 import { BSTSnapshot } from './types/bst';
+import { KnapsackSnapshot } from './types/knapsack';
+import { HeapSortSnapshot } from './types/heapSort';
+import { NQueensSnapshot } from './types/nQueens';
+import { TrieSnapshot } from './types/trie';
+import { TopoSortSnapshot } from './types/topoSort';
 
 // Engines & Snippets
 import { recordDSUSimulation } from './algorithms/dsu/dsuEngine';
@@ -31,6 +36,16 @@ import { recordMergeSortSimulation } from './algorithms/mergesort/mergeSortEngin
 import { MERGE_SORT_CODE_LINES } from './algorithms/mergesort/mergeSortSnippets';
 import { recordBSTSimulation } from './algorithms/bst/bstEngine';
 import { BST_CODE_LINES } from './algorithms/bst/bstSnippets';
+import { recordKnapsackSimulation } from './algorithms/knapsack/knapsackEngine';
+import { KNAPSACK_CODE_LINES } from './algorithms/knapsack/knapsackSnippets';
+import { recordHeapSortSimulation, DEFAULT_HEAP_ARRAY } from './algorithms/heapSort/heapSortEngine';
+import { HEAP_SORT_CODE_LINES } from './algorithms/heapSort/heapSortSnippets';
+import { recordNQueensSimulation } from './algorithms/nQueens/nQueensEngine';
+import { N_QUEENS_CODE_LINES } from './algorithms/nQueens/nQueensSnippets';
+import { recordTrieSimulation } from './algorithms/trie/trieEngine';
+import { TRIE_CODE_LINES } from './algorithms/trie/trieSnippets';
+import { recordTopoSortSimulation } from './algorithms/topoSort/topoSortEngine';
+import { TOPO_SORT_CODE_LINES } from './algorithms/topoSort/topoSortSnippets';
 
 // Components
 import { usePlayback } from './engine/usePlayback';
@@ -49,8 +64,13 @@ import { BFSVisualizer } from './components/visualizers/BFSVisualizer';
 import { DFSVisualizer } from './components/visualizers/DFSVisualizer';
 import { MergeSortVisualizer } from './components/visualizers/MergeSortVisualizer';
 import { BSTVisualizer } from './components/visualizers/BSTVisualizer';
+import { KnapsackVisualizer } from './components/visualizers/KnapsackVisualizer';
+import { HeapSortVisualizer } from './components/visualizers/HeapSortVisualizer';
+import { NQueensVisualizer } from './components/visualizers/NQueensVisualizer';
+import { TrieVisualizer } from './components/visualizers/TrieVisualizer';
+import { TopoSortVisualizer } from './components/visualizers/TopoSortVisualizer';
 
-import { Sparkles, Info, CheckCircle2, AlertTriangle, Layers, Zap } from 'lucide-react';
+import { Sparkles, Info, CheckCircle2, AlertTriangle, Layers, Zap, Backpack, Crown, GitFork } from 'lucide-react';
 
 export const App: React.FC = () => {
   // Active Algorithm
@@ -97,6 +117,12 @@ export const App: React.FC = () => {
   const [bfsStartNode, setBfsStartNode] = useState<number>(0);
   const [dfsStartNode, setDfsStartNode] = useState<number>(0);
 
+  // 8. HeapSort State
+  const [heapArray, setHeapArray] = useState<number[]>([...DEFAULT_HEAP_ARRAY]);
+
+  // 9. N-Queens State
+  const [nQueensSize, setNQueensSize] = useState<number>(4);
+
   // Generate steps per algorithm
   const dsuSteps = useMemo(() => recordDSUSimulation(dsuNodeCount, dsuOperations), [dsuNodeCount, dsuOperations]);
   const bsSteps = useMemo(() => recordBinarySearchSimulation(bsArray, bsTarget), [bsArray, bsTarget]);
@@ -107,6 +133,11 @@ export const App: React.FC = () => {
   const dfsSteps = useMemo(() => recordDFSSimulation(dfsStartNode), [dfsStartNode]);
   const msSteps = useMemo(() => recordMergeSortSimulation(msArray), [msArray]);
   const bstSteps = useMemo(() => recordBSTSimulation(bstValues), [bstValues]);
+  const knapsackSteps = useMemo(() => recordKnapsackSimulation(), []);
+  const heapSortSteps = useMemo(() => recordHeapSortSimulation(heapArray), [heapArray]);
+  const nQueensSteps = useMemo(() => recordNQueensSimulation(nQueensSize), [nQueensSize]);
+  const trieSteps = useMemo(() => recordTrieSimulation(), []);
+  const topoSortSteps = useMemo(() => recordTopoSortSimulation(), []);
 
   // Active steps passed to playback engine
   const activeSteps = useMemo<AlgorithmStep<any>[]>(() => {
@@ -129,10 +160,36 @@ export const App: React.FC = () => {
         return msSteps;
       case 'BST':
         return bstSteps;
+      case 'KNAPSACK':
+        return knapsackSteps;
+      case 'HEAP_SORT':
+        return heapSortSteps;
+      case 'N_QUEENS':
+        return nQueensSteps;
+      case 'TRIE':
+        return trieSteps;
+      case 'TOPO_SORT':
+        return topoSortSteps;
       default:
         return dsuSteps;
     }
-  }, [currentAlgorithm, dsuSteps, bsSteps, dijkstraSteps, kruskalSteps, qsSteps, bfsSteps, dfsSteps, msSteps, bstSteps]);
+  }, [
+    currentAlgorithm,
+    dsuSteps,
+    bsSteps,
+    dijkstraSteps,
+    kruskalSteps,
+    qsSteps,
+    bfsSteps,
+    dfsSteps,
+    msSteps,
+    bstSteps,
+    knapsackSteps,
+    heapSortSteps,
+    nQueensSteps,
+    trieSteps,
+    topoSortSteps,
+  ]);
 
   const playback = usePlayback(activeSteps);
 
@@ -182,6 +239,16 @@ export const App: React.FC = () => {
         return { title: 'MergeSort_DivideAndConquer.cpp', lines: MERGE_SORT_CODE_LINES };
       case 'BST':
         return { title: 'BST_BinarySearchTree.cpp', lines: BST_CODE_LINES };
+      case 'KNAPSACK':
+        return { title: 'Knapsack_DP.cpp', lines: KNAPSACK_CODE_LINES };
+      case 'HEAP_SORT':
+        return { title: 'HeapSort_MaxHeap.cpp', lines: HEAP_SORT_CODE_LINES };
+      case 'N_QUEENS':
+        return { title: 'NQueens_Backtracking.cpp', lines: N_QUEENS_CODE_LINES };
+      case 'TRIE':
+        return { title: 'Trie_PrefixTree.cpp', lines: TRIE_CODE_LINES };
+      case 'TOPO_SORT':
+        return { title: 'TopologicalSort_Kahn.cpp', lines: TOPO_SORT_CODE_LINES };
       default:
         return { title: 'Code.cpp', lines: [] };
     }
@@ -225,6 +292,15 @@ export const App: React.FC = () => {
     setMsArray(newArr);
   }, []);
 
+  const handleGenerateRandomHeapArray = useCallback(() => {
+    const size = 7;
+    const newArr: number[] = [];
+    for (let i = 0; i < size; i++) {
+      newArr.push(Math.floor(Math.random() * 85) + 10);
+    }
+    setHeapArray(newArr);
+  }, []);
+
   // Active step details
   const activeStep = playback.currentStep;
   const activeCodeLine = activeStep ? activeStep.codeLine : 1;
@@ -248,10 +324,31 @@ export const App: React.FC = () => {
         return { icon: <Sparkles className="w-3 h-3 text-emerald-400" />, label: 'CHẤP NHẬN VÀO MST', cls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' };
       case 'SWAP':
         return { icon: <Sparkles className="w-3 h-3 text-purple-400" />, label: 'HOÁN ĐỔI (SWAP)', cls: 'bg-purple-500/15 text-purple-300 border-purple-500/30' };
+      case 'DP_TAKE':
+        return { icon: <Backpack className="w-3 h-3 text-emerald-400" />, label: 'LẤY VÀO BALO', cls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' };
+      case 'DP_SKIP':
+        return { icon: <Info className="w-3 h-3 text-slate-400" />, label: 'BỎ QUA VẬT PHẨM', cls: 'bg-slate-500/15 text-slate-300 border-slate-500/30' };
+      case 'HEAPIFY':
+        return { icon: <GitFork className="w-3 h-3 text-yellow-400" />, label: 'VUN ĐỐNG HEAPIFY', cls: 'bg-yellow-500/15 text-yellow-300 border-yellow-500/30' };
+      case 'PLACE_QUEEN':
+        return { icon: <Crown className="w-3 h-3 text-cyan-400" />, label: 'ĐẶT QUÂN HẬU', cls: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30' };
+      case 'CONFLICT':
+        return { icon: <AlertTriangle className="w-3 h-3 text-rose-400" />, label: 'CHIẾU XUNG ĐỘT', cls: 'bg-rose-500/15 text-rose-300 border-rose-500/30' };
+      case 'BACKTRACK':
+        return { icon: <Info className="w-3 h-3 text-amber-400" />, label: 'QUAY LUI (BACKTRACK)', cls: 'bg-amber-500/15 text-amber-300 border-amber-500/30' };
+      case 'TRIE_INSERT':
+        return { icon: <Sparkles className="w-3 h-3 text-cyan-400" />, label: 'CHÈN TỪ TRIE', cls: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30' };
+      case 'TRIE_TRAVERSE':
+        return { icon: <Zap className="w-3 h-3 text-purple-400" />, label: 'DUYỆT TIỀN TỐ', cls: 'bg-purple-500/15 text-purple-300 border-purple-500/30' };
+      case 'OUTPUT_ORDER':
+        return { icon: <CheckCircle2 className="w-3 h-3 text-sky-400" />, label: 'XUẤT THỨ TỰ TÔ-PÔ', cls: 'bg-sky-500/15 text-sky-300 border-sky-500/30' };
+      case 'REDUCE_INDEGREE':
+        return { icon: <Zap className="w-3 h-3 text-teal-400" />, label: 'GIẢM IN-DEGREE', cls: 'bg-teal-500/15 text-teal-300 border-teal-500/30' };
       default:
         return { icon: <Info className="w-3 h-3 text-cyan-400" />, label: activeStep.actionType, cls: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30' };
     }
   };
+
 
   const badge = getBadge();
 
@@ -389,7 +486,54 @@ export const App: React.FC = () => {
               }
             />
           )}
+
+          {currentAlgorithm === 'KNAPSACK' && (
+            <KnapsackVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as KnapsackSnapshot) ||
+                knapsackSteps[0]?.dataSnapshot
+              }
+            />
+          )}
+
+          {currentAlgorithm === 'HEAP_SORT' && (
+            <HeapSortVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as HeapSortSnapshot) ||
+                heapSortSteps[0]?.dataSnapshot
+              }
+              onGenerateRandomArray={handleGenerateRandomHeapArray}
+            />
+          )}
+
+          {currentAlgorithm === 'N_QUEENS' && (
+            <NQueensVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as NQueensSnapshot) ||
+                nQueensSteps[0]?.dataSnapshot
+              }
+            />
+          )}
+
+          {currentAlgorithm === 'TRIE' && (
+            <TrieVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as TrieSnapshot) ||
+                trieSteps[0]?.dataSnapshot
+              }
+            />
+          )}
+
+          {currentAlgorithm === 'TOPO_SORT' && (
+            <TopoSortVisualizer
+              snapshot={
+                (activeStep?.dataSnapshot as unknown as TopoSortSnapshot) ||
+                topoSortSteps[0]?.dataSnapshot
+              }
+            />
+          )}
         </div>
+
 
         {/* Right Column: Code Viewer (5 cols) - Exactly side-by-side with equal height */}
         <div className="lg:col-span-5 h-full min-h-0 flex flex-col overflow-hidden">

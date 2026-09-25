@@ -7,7 +7,12 @@ export type AlgorithmCategory =
   | 'BFS'
   | 'DFS'
   | 'MERGE_SORT'
-  | 'BST';
+  | 'BST'
+  | 'KNAPSACK'
+  | 'HEAP_SORT'
+  | 'N_QUEENS'
+  | 'TRIE'
+  | 'TOPO_SORT';
 
 export interface AlgorithmStep<T = any> {
   stepIndex: number;
@@ -40,6 +45,17 @@ export interface AlgorithmStep<T = any> {
     | 'CHECK_SAME_SET' 
     | 'UNION_BY_RANK' 
     | 'CYCLE_DETECTED' 
+    | 'DP_CALCULATE'
+    | 'DP_TAKE'
+    | 'DP_SKIP'
+    | 'HEAPIFY'
+    | 'PLACE_QUEEN'
+    | 'REMOVE_QUEEN'
+    | 'CONFLICT'
+    | 'TRIE_INSERT'
+    | 'TRIE_TRAVERSE'
+    | 'REDUCE_INDEGREE'
+    | 'OUTPUT_ORDER'
     | 'COMPLETE';
   variables: Record<string, string | number | boolean | null | undefined>;
   dataSnapshot: T;

@@ -18,11 +18,11 @@
 - 📜 **Đồng bộ hóa dòng mã (Synchronized Step Execution):** Mỗi bước giải thích (narration) được gán chính xác với các dòng code C++ đang thực thi.
 - 🎯 **Cuộn code cục bộ (Isolated Scroll):** Code C++ tự động trượt mượt mà đến đúng dòng highlight mà không làm ảnh hưởng hay rung lắc giao diện toàn trang.
 - ⚡ **Thanh điều khiển trực quan (Playback Controls):** Hỗ trợ Chạy tự động (Play/Pause), Tua bước (Next/Prev step), Chỉnh tốc độ mô phỏng (0.5x, 1x, 2x, 4x) và Tạo dữ liệu ngẫu nhiên mới (Randomize).
-- 🧭 **Kho thuật toán phong phú (Algorithm Catalog Modal & Quick Switcher):** Dễ dàng tìm kiếm và chuyển đổi giữa 9 thuật toán với 1 cú click chuột.
+- 🧭 **Kho thuật toán phong phú (Algorithm Catalog Modal & Quick Switcher):** Dễ dàng tìm kiếm và chuyển đổi giữa 14 thuật toán với 1 cú click chuột.
 
 ---
 
-## 📚 Danh Mục 9 Thuật Toán Hỗ Trợ
+## 📚 Danh Mục 14 Thuật Toán Hỗ Trợ (6 Phân Nhóm Toàn Diện)
 
 ### 1. 🌐 Đồ thị & Tập hợp (Graph & Sets)
 - **Disjoint Set Union (DSU / Union-Find):** Nén đường đi (*Path Compression* $\mathcal{O}(\alpha(N))$) & hợp nhất theo hạng (*Union by Rank*), phát hiện chu trình đồ thị vô hướng.
@@ -30,6 +30,7 @@
 - **Kruskal's Minimum Spanning Tree (MST):** Thuật toán tham lam (*Greedy*) sắp xếp trọng số cạnh kết hợp DSU dựng cây khung nhỏ nhất.
 - **Breadth-First Search (BFS):** Duyệt đồ thị theo từng lớp (*Layer-by-layer*) với cấu trúc hàng đợi *Queue (FIFO)*.
 - **Depth-First Search (DFS):** Duyệt theo chiều sâu với ngăn xếp *Call Stack (LIFO)* và cơ chế quay lui (*Backtracking*).
+- **Topological Sort (Thuật toán Kahn):** Sắp xếp thứ tự các đỉnh đồ thị có hướng không chu trình (DAG) bằng bán bậc vào (*In-degree*) và Queue.
 
 ### 2. 🔍 Tìm kiếm (Searching)
 - **Binary Search (Tìm kiếm nhị phân):** 3 con trỏ `LOW`, `MID`, `HIGH` chia đôi không gian tìm kiếm với độ phức tạp tối ưu $\mathcal{O}(\log N)$.
@@ -37,9 +38,17 @@
 ### 3. ⚡ Sắp xếp (Sorting)
 - **Quick Sort:** Phân hoạch Lomuto (*Lomuto Partitioning*), chọn chốt *Pivot*, swap trực quan và đệ quy sắp xếp.
 - **Merge Sort:** Chia để trị (*Divide and Conquer*), phân tách các mảng con và trộn vào mảng đệm phụ `temp[]`.
+- **Heap Sort:** Xây dựng Max-Heap từ mảng nhị phân, liên tục trích xuất cực đại đưa về cuối mảng và vun đống lại (*Heapify* $\mathcal{O}(N \log N)$).
 
 ### 4. 🌲 Cây & Cấu trúc dữ liệu (Tree & Data Structures)
 - **Binary Search Tree (BST):** Chèn các phần tử vào cây nhị phân tìm kiếm và minh họa duyệt trung thứ tự (*In-order Traversal*) sinh ra dãy tăng dần.
+- **Trie (Cây tiền tố - Prefix Tree):** Cây lưu trữ chuỗi ký tự chia sẻ tiền tố chung, tìm kiếm từ và tiền tố siêu tốc $\mathcal{O}(L)$.
+
+### 5. 🎒 Quy Hoạch Động (Dynamic Programming)
+- **0/1 Knapsack Problem (Bài toán Balo):** Xây dựng bảng quy hoạch động 2D $dp[i][w]$, trực quan hóa lựa chọn Lấy (*Take*) vs Bỏ (*Skip*), và truy ngược lời giải tối ưu.
+
+### 6. 👑 Đệ Quy & Quay Lui (Backtracking)
+- **N-Queens Problem (Bài toán N Quân Hậu):** Đặt N quân hậu lên bàn cờ $N \times N$, kiểm tra các tia chiếu xung đột (hàng, cột, đường chéo) và quay lui từng bước trực quan.
 
 ---
 

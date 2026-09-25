@@ -10,7 +10,10 @@ import {
   Layers,
   Split,
   GitBranch,
-  LayoutGrid
+  LayoutGrid,
+  GitFork,
+  Backpack,
+  Crown
 } from 'lucide-react';
 import { AlgorithmCategory } from '../types/algorithm';
 
@@ -65,6 +68,12 @@ export const Navbar: React.FC<NavbarProps> = ({
       color: 'text-rose-400 border-rose-500/30 bg-rose-500/15',
     },
     {
+      id: 'HEAP_SORT',
+      label: 'Heap Sort',
+      icon: <GitFork className="w-3.5 h-3.5" />,
+      color: 'text-yellow-400 border-yellow-500/30 bg-yellow-500/15',
+    },
+    {
       id: 'BFS',
       label: 'BFS (Queue)',
       icon: <Workflow className="w-3.5 h-3.5" />,
@@ -77,10 +86,34 @@ export const Navbar: React.FC<NavbarProps> = ({
       color: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/15',
     },
     {
+      id: 'TOPO_SORT',
+      label: 'Topo Sort',
+      icon: <Workflow className="w-3.5 h-3.5" />,
+      color: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/15',
+    },
+    {
       id: 'BST',
       label: 'BST Tree',
       icon: <GitBranch className="w-3.5 h-3.5" />,
       color: 'text-lime-400 border-lime-500/30 bg-lime-500/15',
+    },
+    {
+      id: 'TRIE',
+      label: 'Trie Prefix',
+      icon: <GitBranch className="w-3.5 h-3.5" />,
+      color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/15',
+    },
+    {
+      id: 'KNAPSACK',
+      label: 'Knapsack DP',
+      icon: <Backpack className="w-3.5 h-3.5" />,
+      color: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/15',
+    },
+    {
+      id: 'N_QUEENS',
+      label: 'N-Queens',
+      icon: <Crown className="w-3.5 h-3.5" />,
+      color: 'text-amber-400 border-amber-500/30 bg-amber-500/15',
     },
   ];
 
@@ -105,12 +138,12 @@ export const Navbar: React.FC<NavbarProps> = ({
         <button
           onClick={onOpenCatalog}
           className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-dark-850 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 text-slate-200 text-xs font-semibold transition-all shadow-sm"
-          title="Mở toàn bộ danh mục 9 thuật toán"
+          title="Mở toàn bộ danh mục 14 thuật toán"
         >
           <LayoutGrid className="w-3.5 h-3.5 text-cyan-400" />
           <span>Kho Thuật Toán</span>
           <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-            9
+            14
           </span>
         </button>
       </div>
