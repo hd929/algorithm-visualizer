@@ -10,6 +10,16 @@
   }
 }
 
+/* On phones, shrink the visualizer canvases so the studio fits without scrolling the whole window */
+@media (max-width: 1023px) {
+  .min-h-\[380px\] {
+    min-height: 240px !important;
+  }
+  .min-h-\[360px\] {
+    min-height: 240px !important;
+  }
+}
+
 /* Custom scrollbar for sleek dark code views */
 ::-webkit-scrollbar {
   width: 6px;

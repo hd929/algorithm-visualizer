@@ -70,12 +70,13 @@ import { NQueensVisualizer } from './components/visualizers/NQueensVisualizer';
 import { TrieVisualizer } from './components/visualizers/TrieVisualizer';
 import { TopoSortVisualizer } from './components/visualizers/TopoSortVisualizer';
 
-import { Sparkles, Info, CheckCircle2, AlertTriangle, Layers, Zap, Backpack, Crown, GitFork } from 'lucide-react';
+import { Sparkles, Info, CheckCircle2, AlertTriangle, Layers, Zap, Backpack, Crown, GitFork, Code2, MonitorPlay } from 'lucide-react';
 
 export const App: React.FC = () => {
   // Active Algorithm
   const [currentAlgorithm, setCurrentAlgorithm] = useState<AlgorithmCategory>('DSU');
   const [isCatalogOpen, setIsCatalogOpen] = useState<boolean>(false);
+  const [mobilePane, setMobilePane] = useState<'visualizer' | 'code'>('visualizer');
 
   // 1. DSU State
   const [dsuNodeCount, setDsuNodeCount] = useState<number>(7);
@@ -257,6 +258,7 @@ export const App: React.FC = () => {
   // Handlers
   const handleSelectAlgorithm = useCallback((algo: AlgorithmCategory) => {
     setCurrentAlgorithm(algo);
+    setMobilePane('visualizer');
     playback.reset();
   }, [playback]);
 
@@ -353,7 +355,7 @@ export const App: React.FC = () => {
   const badge = getBadge();
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-dark-900 text-slate-100 overflow-hidden select-none">
+    <div className="h-[100dvh] w-screen flex flex-col bg-dark-900 text-slate-100 overflow-hidden select-none">
       {/* 1. Navbar (Fixed height 56px) */}
       <Navbar
         currentAlgorithm={currentAlgorithm}
@@ -362,27 +364,28 @@ export const App: React.FC = () => {
         onReset={playback.reset}
       />
 
-      {/* 2. Top Step Narration & Live Variables Bar (Fixed height ~52px) */}
-      <div className="bg-dark-850/90 border-b border-slate-800/80 px-4 md:px-6 py-2 flex items-center justify-between gap-4 shrink-0 z-20">
-        {/* Left: Action Badge + Title + Narration */}
-        <div className="flex items-center gap-3 min-w-0 flex-1">
+      {/* 2. Top Step Narration & Live Variables Bar (Fixed height ~52px) — stack on mobile */}
+      <div className="bg-dark-850/90 border-b border-slate-800/80 px-3 md:px-6 py-2 flex flex-col sm:flex-row sm:items-center gap-2 shrink-0 z-20">
+        {/* Upper row: Badge + Title/Description */}
+        <div className="flex items-start sm:items-center gap-2 sm:gap-3 min-w-0 flex-1">
           <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold border shrink-0 ${badge.cls}`}>
             {badge.icon}
-            <span>{badge.label}</span>
+            <span className="hidden sm:inline">{badge.label}</span>
+            <span className="sm:hidden">{badge.label.slice(0, 10)}</span>
           </span>
 
           <div className="min-w-0 flex-1">
             <h2 className="font-bold text-xs md:text-sm text-slate-100 truncate">
               {activeStep ? activeStep.title : 'Chuẩn bị mô phỏng'}
             </h2>
-            <p className="text-[11px] text-slate-400 truncate hidden sm:block">
+            <p className="text-[11px] text-slate-400 hidden sm:block truncate">
               {activeStep ? activeStep.description : 'Bấm Play hoặc Bước tiếp theo để bắt đầu.'}
             </p>
           </div>
         </div>
 
-        {/* Right: Live Variable Chips */}
-        <div className="flex items-center gap-1.5 overflow-x-auto shrink-0 max-w-[45%]">
+        {/* Lower row on mobile: Live Variable Chips */}
+        <div className="flex items-center gap-1.5 overflow-x-auto shrink-0 max-w-full sm:max-w-[45%] scrollbar-thin">
           {Object.entries(activeVariables).slice(0, 5).map(([k, v]) => (
             <div
               key={k}
@@ -395,10 +398,30 @@ export const App: React.FC = () => {
         </div>
       </div>
 
+      {/* Mobile pane tabs (pill segmented control) */}
+      <div className="lg:hidden flex justify-center shrink-0 py-2">
+        <div className="inline-flex bg-dark-850 border border-slate-800 rounded-full p-1 gap-1">
+          {(['visualizer', 'code'] as const).map((p) => {
+            const on = mobilePane === p;
+            return (
+              <button
+                key={p}
+                onClick={() => setMobilePane(p)}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${on ? 'bg-cyan-500 text-dark-900 shadow-glow-cyan' : 'text-slate-400 hover:text-slate-200'}`}
+              >
+                {p === 'visualizer' ? <MonitorPlay className="w-3.5 h-3.5" /> : <Code2 className="w-3.5 h-3.5" />}
+                <span>{p === 'visualizer' ? 'Mô phỏng' : 'Code'}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* 3. Central Studio Area (Flex-1, side-by-side, no overflow) */}
-      <div className="flex-1 min-h-0 p-3 md:p-4 grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch overflow-hidden">
-        {/* Left Column: Visualizer Canvas (7 cols) */}
-        <div className="lg:col-span-7 h-full min-h-0 flex flex-col overflow-hidden">
+      <div className="flex-1 min-h-0 p-2 md:p-4 grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch overflow-hidden">
+        {/* Left Column: Visualizer Canvas (7 cols) — hidden when Code pane on mobile */}
+        <div className={`lg:col-span-7 h-full min-h-0 flex flex-col overflow-hidden ${mobilePane === 'code' ? 'hidden lg:flex' : 'flex'}`}>
+
           {currentAlgorithm === 'DSU' && (
             <DSUVisualizer
               snapshot={
@@ -535,8 +558,8 @@ export const App: React.FC = () => {
         </div>
 
 
-        {/* Right Column: Code Viewer (5 cols) - Exactly side-by-side with equal height */}
-        <div className="lg:col-span-5 h-full min-h-0 flex flex-col overflow-hidden">
+        {/* Right Column: Code Viewer (5 cols) — side-by-side on desktop, tabbed on mobile */}
+        <div className={`lg:col-span-5 h-full min-h-0 flex flex-col overflow-hidden ${mobilePane === 'visualizer' ? 'hidden lg:flex' : 'flex'}`}>
           <CodeViewer
             title={codeDetails.title}
             lines={codeDetails.lines}
