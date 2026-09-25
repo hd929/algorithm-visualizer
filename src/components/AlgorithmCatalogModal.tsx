@@ -207,22 +207,22 @@ export const AlgorithmCatalogModal: React.FC<AlgorithmCatalogModalProps> = ({
   });
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
-      <div className="bg-dark-850 border border-slate-700/80 rounded-2xl w-full max-w-4xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center sm:p-4 animate-in fade-in duration-200">
+      <div className="bg-dark-850 border border-slate-700/80 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-4xl shadow-2xl overflow-hidden flex flex-col max-h-[95dvh] sm:max-h-[90vh]">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-dark-900/90">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 shadow-glow-cyan">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-800 flex items-center justify-between bg-dark-900/90 shrink-0">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="p-2 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 shadow-glow-cyan shrink-0">
               <Layers className="w-5 h-5 text-white" />
             </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <span>Kho Thuật Toán Mô Phỏng</span>
-                <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-normal">
-                  {ALGORITHMS_CATALOG.length} Thuật toán
+            <div className="min-w-0">
+              <h2 className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
+                <span className="truncate">Kho Thuật Toán</span>
+                <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-normal shrink-0">
+                  {ALGORITHMS_CATALOG.length}
                 </span>
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-400 hidden sm:block">
                 Chọn một thuật toán để chuyển sang giao diện mô phỏng trực quan ngay lập tức
               </p>
             </div>
@@ -230,31 +230,31 @@ export const AlgorithmCatalogModal: React.FC<AlgorithmCatalogModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Filter Bar */}
-        <div className="p-4 border-b border-slate-800 bg-dark-900/40 flex flex-wrap items-center justify-between gap-3">
-          <div className="relative flex-1 min-w-[240px]">
+        <div className="px-4 sm:p-4 py-3 border-b border-slate-800 bg-dark-900/40 flex flex-col sm:flex-row gap-3 shrink-0">
+          <div className="relative flex-1 min-w-0">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Tìm kiếm thuật toán (tên, từ khóa, độ phức tạp...)"
-              className="w-full bg-dark-900 border border-slate-700/80 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              placeholder="Tìm kiếm thuật toán..."
+              className="w-full bg-dark-900 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2.5 min-h-[44px] text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
             />
           </div>
 
-          <div className="flex items-center gap-1.5 overflow-x-auto">
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-thin pb-1">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${
+                className={`px-3 py-2 min-h-[40px] rounded-xl text-xs font-medium whitespace-nowrap transition-all shrink-0 ${
                   selectedCategory === cat
                     ? 'bg-cyan-500 text-dark-900 font-bold shadow-sm'
                     : 'bg-dark-900 text-slate-400 hover:text-slate-200 border border-slate-800'
@@ -267,7 +267,7 @@ export const AlgorithmCatalogModal: React.FC<AlgorithmCatalogModalProps> = ({
         </div>
 
         {/* Algorithms Grid */}
-        <div className="p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-3 sm:p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
           {filteredAlgorithms.map((algo) => {
             const isCurrent = currentAlgorithm === algo.id;
 
@@ -278,20 +278,20 @@ export const AlgorithmCatalogModal: React.FC<AlgorithmCatalogModalProps> = ({
                   onSelectAlgorithm(algo.id);
                   onClose();
                 }}
-                className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between gap-3 group relative overflow-hidden ${
+                className={`p-3 sm:p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between gap-2 sm:gap-3 group relative overflow-hidden active:scale-[0.98] ${
                   isCurrent
                     ? 'bg-gradient-to-br from-cyan-500/20 via-dark-850 to-purple-500/20 border-cyan-400 shadow-glow-cyan ring-1 ring-cyan-400/50'
                     : 'bg-dark-900/80 hover:bg-dark-800/80 border-slate-800 hover:border-slate-700'
                 }`}
               >
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1.5 sm:gap-2">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <div className="p-2 rounded-xl bg-dark-850 border border-slate-800 group-hover:border-slate-700">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                      <div className="p-1.5 sm:p-2 rounded-xl bg-dark-850 border border-slate-800 group-hover:border-slate-700 shrink-0">
                         {algo.icon}
                       </div>
-                      <div>
-                        <h3 className="font-bold text-sm text-slate-100 group-hover:text-cyan-300 transition-colors">
+                      <div className="min-w-0">
+                        <h3 className="font-bold text-xs sm:text-sm text-slate-100 group-hover:text-cyan-300 transition-colors truncate">
                           {algo.name}
                         </h3>
                         <span className="text-[10px] text-slate-400">
@@ -301,29 +301,29 @@ export const AlgorithmCatalogModal: React.FC<AlgorithmCatalogModalProps> = ({
                     </div>
 
                     {isCurrent && (
-                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shrink-0">
                         Đang chọn
                       </span>
                     )}
                   </div>
 
-                  <p className="text-xs text-slate-400 leading-relaxed pt-1">
+                  <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed line-clamp-2">
                     {algo.description}
                   </p>
                 </div>
 
                 <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 font-mono text-[10px]">
-                    <span className="px-2 py-0.5 rounded bg-dark-900 border border-slate-800 text-slate-400">
-                      Time: <span className="text-cyan-300 font-semibold">{algo.timeComplexity}</span>
+                  <div className="flex items-center gap-1.5 sm:gap-2 font-mono text-[10px]">
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded bg-dark-900 border border-slate-800 text-slate-400">
+                      <span className="text-cyan-300 font-semibold">{algo.timeComplexity}</span>
                     </span>
-                    <span className="px-2 py-0.5 rounded bg-dark-900 border border-slate-800 text-slate-400">
-                      Space: <span className="text-purple-300 font-semibold">{algo.spaceComplexity}</span>
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded bg-dark-900 border border-slate-800 text-slate-400">
+                      <span className="text-purple-300 font-semibold">{algo.spaceComplexity}</span>
                     </span>
                   </div>
 
                   <div className="flex items-center gap-1 text-xs font-semibold text-cyan-400 group-hover:translate-x-0.5 transition-transform">
-                    <span>Mô phỏng</span>
+                    <span className="hidden sm:inline">Mô phỏng</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </div>
                 </div>

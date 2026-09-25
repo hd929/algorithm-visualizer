@@ -399,7 +399,7 @@ export const App: React.FC = () => {
       </div>
 
       {/* Mobile pane tabs (pill segmented control) */}
-      <div className="lg:hidden flex justify-center shrink-0 py-2">
+      <div className="lg:hidden flex justify-center shrink-0 py-1.5">
         <div className="inline-flex bg-dark-850 border border-slate-800 rounded-full p-1 gap-1">
           {(['visualizer', 'code'] as const).map((p) => {
             const on = mobilePane === p;
@@ -407,9 +407,9 @@ export const App: React.FC = () => {
               <button
                 key={p}
                 onClick={() => setMobilePane(p)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${on ? 'bg-cyan-500 text-dark-900 shadow-glow-cyan' : 'text-slate-400 hover:text-slate-200'}`}
+                className={`px-5 py-2 min-h-[44px] rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${on ? 'bg-cyan-500 text-dark-900 shadow-glow-cyan' : 'text-slate-400 hover:text-slate-200'}`}
               >
-                {p === 'visualizer' ? <MonitorPlay className="w-3.5 h-3.5" /> : <Code2 className="w-3.5 h-3.5" />}
+                {p === 'visualizer' ? <MonitorPlay className="w-4 h-4" /> : <Code2 className="w-4 h-4" />}
                 <span>{p === 'visualizer' ? 'Mô phỏng' : 'Code'}</span>
               </button>
             );

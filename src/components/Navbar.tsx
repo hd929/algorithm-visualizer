@@ -161,7 +161,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Algorithm Catalog Button */}
         <button
           onClick={onOpenCatalog}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-dark-850 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 text-slate-200 text-xs font-semibold transition-all shadow-sm"
+          className="flex items-center gap-2 px-3 py-2 min-h-[44px] rounded-xl bg-dark-850 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 text-slate-200 text-xs font-semibold transition-all shadow-sm"
           title="Mở toàn bộ danh mục 14 thuật toán"
         >
           <LayoutGrid className="w-3.5 h-3.5 text-cyan-400" />
@@ -181,16 +181,16 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="flex items-center gap-2 shrink-0">
         <button
           onClick={onReset}
-          className="flex items-center gap-1.5 px-2.5 md:px-3 py-1.5 rounded-xl bg-dark-800 hover:bg-slate-700/60 border border-slate-700/60 text-slate-300 hover:text-white transition-all text-xs"
+          className="flex items-center justify-center gap-1.5 px-2.5 md:px-3 min-h-[44px] min-w-[44px] rounded-xl bg-dark-800 hover:bg-slate-700/60 border border-slate-700/60 text-slate-300 hover:text-white transition-all text-xs"
           title="Khởi tạo lại trạng thái ban đầu (R)"
         >
-          <RotateCcw className="w-3.5 h-3.5" />
+          <RotateCcw className="w-4 h-4" />
           <span className="hidden md:inline">Reset</span>
         </button>
 
         <button
           onClick={() => setDrawerOpen((o) => !o)}
-          className="lg:hidden p-2 rounded-xl bg-dark-800 hover:bg-slate-700/60 border border-slate-700/60 text-slate-200 transition-all"
+          className="lg:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-dark-800 hover:bg-slate-700/60 border border-slate-700/60 text-slate-200 transition-all"
           title="Chọn thuật toán"
         >
           {drawerOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
